@@ -49,7 +49,7 @@ if (isset($_POST['Submit'])) {
             echo "<script> alert('User already exists');</script>";
         }
         else if(!valPostal($user->getPostalCode(), $user->getProvince())){
-            echo "<script> alert('Invalid Postal Code!');</script>";
+            echo "<script> alert('Postal code and Province do not match, please verify and try again!');</script>";
         }
 //Else call the Add new member method of the MemberClass, if it succeeds display success esle display failure
         else {
