@@ -157,9 +157,13 @@ while($row = mysqli_fetch_array($result))
 
 		if(isset($_POST['search'])){
 			//Phase #5 - V5.1 -you must write a query that will get a list of members that contain the search string.
+      //Assign the search criteria from the post to a variable
       $criteria = $_POST['search'];
+      //create a search string
       $searchString = "SELECT FirstName, LastName, profImage from members WHERE LOWER(FirstName) LIKE '%".$criteria."%' OR LOWER(LastName) LIKE '%".$criteria."%';";
+      // Query the DB and store the result set 
       $result = mysqli_query($con, $searchString);
+      //Loop through the result set and put it into an array if image is null assign the generic image.
       while($array = mysqli_fetch_array($result)){
         $image = "";
         if ($array[2] == ''){
@@ -168,7 +172,7 @@ while($row = mysqli_fetch_array($result))
         else {
           $image = $array[2];
         }
-
+        //Displays the picture, name and a link to add as friend. 
         echo "<img width=90 height=75 alt='Unable to View' src='" . $image . "'>" . "  <b>" .
         $array[0] . "  " . $array[1] . "</b>  " . "<BR>" .
         "<a href=\"addFriend.php\"><img src=\"img/friends.png\" width=\"16\" height=\"12\" border=\"0\" /> &nbsp;Send Friend Request"
