@@ -65,5 +65,4 @@ try {
     return false;      
 	}
 }
-//echo valPostal("R5G 1T1", "MB");
 ?>
