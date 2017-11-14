@@ -54,7 +54,7 @@ try {
 		echo "<table>\n";
 		printPostalDetails($response -> PostalDetail, "");
 		echo "</table>\n";
-		echo $postProvince = $response -> PostalDetail->StateOrProvinceCode;
+		//echo $postProvince = $response -> PostalDetail->StateOrProvinceCode;
 
 	}else{
         printError($client, $response);
