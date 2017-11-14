@@ -156,8 +156,7 @@ while($row = mysqli_fetch_array($result))
 <?php
 
 		if(isset($_POST['search'])){
-	//Phase #5 - V5.1 -you must write a query that will get a list of members that contain the search string.
-     //Assign the search criteria from the post to a variable
+      //Assign the search criteria from the post to a 
       $criteria = $_POST['search'];
       //create a search string
       $searchString = "SELECT FirstName, LastName, profImage from members WHERE LOWER(FirstName) LIKE '%".$criteria."%' OR LOWER(LastName) LIKE '%".$criteria."%';";
