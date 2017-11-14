@@ -50,5 +50,35 @@
 		}
 
 	}
+	function setProfPic($con, $name, $tmp_name, $size, $path, $type){
+		$save_image = "UPDATE members
+            SET
+            profImage = '$path$name'
+            WHERE member_id = '".$this->memberid."';";
+        if (isset($name)) {
+			if ($type == 'image/jpeg' || $type == 'image/gif' || $type == 'image/png'){
+            	if ($size > 5242880){
+                	return "Image must be smaller than 5MB";
+                }
+            	else {
+                	if (!file_exists($path.$name)){
+                    	move_uploaded_file($tmp_name, $path . $name);
+                    	mysqli_query($con,$save_image);
+                    	if (mysqli_affected_rows($con) > 0){
+                       		return "Profile Image Updated!";
+                       		// header('location:home.php');
+                    	}
+                	}
+                	else {
+                    	mysqli_query($con,$save_image);
+                    	return "Profile Image Updated!";
+                	}
+            	}
+        	}
+        	else {
+            	return "JPEG, GIF or PNG Format only";
+        	}
+    	}
+	}
 }
 ?>

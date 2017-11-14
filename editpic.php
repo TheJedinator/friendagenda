@@ -1,8 +1,9 @@
 <?php
 //this line turns on output buffering. If you don't use OB, you will get all kinds of errors when trying to redirect the user.
 ob_start();
-include('session.php');?>
-<?php include('connect.php');?>
+include('session.php');
+include('connect.php');
+?>
 
 
 <html>
@@ -248,44 +249,20 @@ $user= $_SESSION['SESS_FIRST_NAME'];
 
 
 if (isset($_FILES['pic'])){
+	include ('photoClass.php');
     $name= $_FILES['pic']['name'];
-
     $tmp_name= $_FILES['pic']['tmp_name'];
-
     $size= $_FILES['pic']['size'];
-
     $path= "Upload/";
-
     $type = $_FILES['pic']['type'];
-
-    $save_image = "UPDATE members
-            SET
-            profImage = '$path$name'
-            WHERE member_id = '".$id."';";
-    //echo $_FILES['pic']['type'];
-    if (isset($name)) {
-        if ($type == 'image/jpeg' || $type == 'image/gif' || $type == 'image/png'){
-            if ($size > 5242880){
-                echo "Image must be smaller than 5MB";
-                }
-            else {
-                if (!file_exists($path.$name)){
-                    move_uploaded_file($tmp_name, $path . $name);
-                    mysqli_query($con,$save_image);
-                    if (mysqli_affected_rows($con) > 0){
-                        //echo 'Uploaded!' . "<BR>";
-                        header('location:home.php');
-                    }
-                }
-                else {
-                    mysqli_query($con,$save_image);
-                    header('location:home.php');
-                }
-            }
-        }
-        else {
-            echo "JPEG, GIF or PNG Format only";
-        }
+    $p = new Photo();
+    $p->setMemberid($_SESSION['SESS_MEMBER_ID']);
+    $p->setProfPic($con, $name, $tmp_name, $size, $path, $type);
+    if ($p->setProfPic($con, $name, $tmp_name, $size, $path, $type) == "Profile Image Updated!"){
+    	header('location:home.php');
+    }
+    else {
+    	echo $p->setProfPic($con, $name, $tmp_name, $size, $path, $type);
     }
 }
 
