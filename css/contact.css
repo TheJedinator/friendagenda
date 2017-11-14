@@ -1,0 +1,17 @@
+#footer {
+    padding: 0px!important;
+    clear: both;
+}
+
+.topleft {
+    padding-bottom: 30px;
+}
+
+iframe {
+    float: left; 
+    clear: both;
+}
+
+table {
+    margin: auto;
+}
