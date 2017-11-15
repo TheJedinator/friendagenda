@@ -3,6 +3,7 @@
 ob_start();
 include('session.php');
 include('connect.php');
+include ('photoClass.php');
 ?>
 
 
@@ -249,7 +250,7 @@ $user= $_SESSION['SESS_FIRST_NAME'];
 
 
 if (isset($_FILES['pic'])){
-	include ('photoClass.php');
+
     $name= $_FILES['pic']['name'];
     $tmp_name= $_FILES['pic']['tmp_name'];
     $size= $_FILES['pic']['size'];
