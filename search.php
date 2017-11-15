@@ -162,7 +162,7 @@ while($row = mysqli_fetch_array($result))
       echo search($con, $criteria);
       
 	}
-        function search($con, $criteria){
+function search($con, $criteria){
           $myString = "";
         $searchString = "SELECT FirstName, LastName, profImage from members WHERE LOWER(FirstName) LIKE '%".$criteria."%' OR LOWER(LastName) LIKE '%".$criteria."%';";
 
