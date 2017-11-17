@@ -41,28 +41,28 @@ $request['CarrierCode'] = 'FDXE';
 
 
 try {
-	
-	
 	if(setEndpoint('changeEndpoint')){
 		$newLocation = $client->__setLocation(setEndpoint('endpoint'));
-	}
+	
 	$response = $client -> validatePostal($request);
     //Get's the province code returned by the webservice
-    $postProvince = trim($response -> PostalDetail->StateOrProvinceCode);
-    $province = strtoupper(trim($province));    
-    if ($response -> HighestSeverity != 'FAILURE' && $response -> HighestSeverity != 'ERROR'){
-    	if ($province == $postProvince){
-       		return true;
-   		} else {
-   			return false;
-   		}  	
-	}
-	else{
-		return false;	
+    	if ($response -> HighestSeverity != 'FAILURE' && $response -> HighestSeverity != 'ERROR'){
+    		$postProvince = trim($response -> PostalDetail->StateOrProvinceCode);
+    		$province = strtoupper(trim($province));    
+    		if ($province == $postProvince){
+       			return true;
+   			} else {
+   				return false;
+   			}  	
+		}
+		else{
+			return false;	
     } 
+}
 } catch (SoapFault $exception) {
 	echo "Exception False";
     return false;      
 	}
+
 }
 ?>
