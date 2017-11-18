@@ -21,13 +21,16 @@ if (isset($_POST['Submit'])) {
 	$user->setFirstName($_POST['fname']);
 	$user->setLastName($_POST['lname']);
 	$user->setAddress($_POST['address']);
-	$user->setProvince($_POST['province']);
-	$user->setPostalCode($_POST['postal']);
+	//$user->setProvince($_POST['province']);
+	//$user->setPostalCode($_POST['postal']);
 	$user->setPhone($_POST['cnumber']);
 	$user->setEmail($_POST['email']);
 	$user->setGender($_POST['gender']);
 	$user->setBday( $_POST['month']);
 	$user->setPassword($_POST['cpassword']);
+
+    $prov = $_POST['province'];
+    $inValidPostal = $_POST['postal'];
 //UN OR EMAIL Variables
         $email_inuse= 0;
         $username_inuse = 0;
@@ -48,7 +51,7 @@ if (isset($_POST['Submit'])) {
         else if ($username_inuse > 0) {
             echo "<script> alert('User already exists');</script>";
         }
-        else if(!valPostal($user->getPostalCode(), $user->getProvince())){
+        else if(!valPostal($inValidPostal, $prov)){
             echo "<script> alert('Postal code and Province do not match, please verify and try again!');</script>";
         }
 //Else call the Add new member method of the MemberClass, if it succeeds display success esle display failure
