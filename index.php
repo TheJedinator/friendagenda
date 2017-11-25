@@ -56,7 +56,8 @@ if (isset($_POST['Submit'])) {
         }
 //Else call the Add new member method of the MemberClass, if it succeeds display success esle display failure
         else {
-            
+            $user->setPostalCode($inValidPostal);
+            $user->setProvince($prov);
            $result = $user->AddNewMember($con);
            // echo mysqli_error($con);
             if ($result > 0){
