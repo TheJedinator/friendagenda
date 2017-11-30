@@ -158,13 +158,15 @@ while($row = mysqli_fetch_array($result))
 		if(isset($_POST['search'])){
       //Assign the search criteria from the post to a 
       $criteria = $_POST['search'];
-      
+      if ($criteria == ""){
+        echo "Please enter a search term";
+      } else {
       echo search($con, $criteria);
-      
+      }
 	}
 function search($con, $criteria){
           $myString = "";
-        $searchString = "SELECT FirstName, LastName, profImage from members WHERE LOWER(FirstName) LIKE '%".$criteria."%' OR LOWER(LastName) LIKE '%".$criteria."%';";
+          $searchString = "SELECT FirstName, LastName, profImage from members WHERE LOWER(FirstName) LIKE '%".$criteria."%' OR LOWER(LastName) LIKE '%".$criteria."%';";
 
         $result = mysqli_query($con, $searchString);
         while($array = mysqli_fetch_array($result)){
@@ -181,6 +183,9 @@ function search($con, $criteria){
         "<a href=\"addFriend.php\"><img src=\"img/friends.png\" width=\"16\" height=\"12\" border=\"0\" /> &nbsp;Send Friend Request"
          ."<BR><BR>";
         }//end while loop
+        if ($array[0] == ""){
+          $myString .="No results found";
+        }
         return $myString;
       }
 ?>
