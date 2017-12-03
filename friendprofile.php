@@ -184,6 +184,7 @@ $result = mysqli_query($con, "SELECT * FROM friends WHERE  friends_with = '$id' 
 $result = mysqli_query($con, "SELECT * FROM members WHERE member_id='".$_SESSION['SESS_MEMBER_ID'] ."'");
 while($row = mysqli_fetch_array($result))
   {
+  	$_SESSION['profileimage'] = $row["profImage"];
   echo "<img width=20 height=15 alt='Unable to View' src='" . $row["profImage"] . "'>";
 echo"  ";
   echo $row["FirstName"];
@@ -247,8 +248,8 @@ while($row = mysqli_fetch_array($result))
             <textarea name="message" cols="45" rows="5" id="message" onclick="this.value='';"></textarea>
           </div>
           <input name="name" type="hidden" id="name" value="<?php echo $_SESSION['SESS_FIRST_NAME'];?>"/>
-		  <input name="poster" type="hidden" id="name" value="<?php echo $_SESSION['SESS_MEMBER_ID'];?>"/>
-          <input name="name1" type="hidden" id="name" value="<?php echo $_SESSION['SESS_LAST_NAME'];?>"/>
+		  <input name="poster" type="hidden" id="poster" value="<?php echo $_SESSION['SESS_MEMBER_ID'];?>"/>
+          <input name="lastname" type="hidden" id="lastname" value="<?php echo $_SESSION['SESS_LAST_NAME'];?>"/>
           <input type="submit" name="btnlog" value="Post" class="greenButton" />
           </div>
         </form>

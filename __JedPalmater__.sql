@@ -1,6 +1,8 @@
+CREATE DATABASE  IF NOT EXISTS `fa-jedpalmater` /*!40100 DEFAULT CHARACTER SET latin1 */;
+USE `fa-jedpalmater`;
 -- MySQL dump 10.13  Distrib 5.7.17, for Win64 (x86_64)
 --
--- Host: localhost    Database: pizzadb
+-- Host: localhost    Database: fa-jedpalmater
 -- ------------------------------------------------------
 -- Server version	5.7.19
 
@@ -16,288 +18,14 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Current Database: `pizzadb`
---
-
-CREATE DATABASE /*!32312 IF NOT EXISTS*/ `pizzadb` /*!40100 DEFAULT CHARACTER SET latin1 */;
-
-USE `pizzadb`;
-
---
--- Table structure for table `crusttypes`
---
-
-DROP TABLE IF EXISTS `crusttypes`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `crusttypes` (
-  `crustTypeId` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(45) NOT NULL,
-  PRIMARY KEY (`crustTypeId`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `crusttypes`
---
-
-LOCK TABLES `crusttypes` WRITE;
-/*!40000 ALTER TABLE `crusttypes` DISABLE KEYS */;
-INSERT INTO `crusttypes` VALUES (1,'Thin Crust'),(2,'Handmade Pan'),(3,'Original'),(4,'Gluten'),(5,'Chicago Style');
-/*!40000 ALTER TABLE `crusttypes` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `customer`
---
-
-DROP TABLE IF EXISTS `customer`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `customer` (
-  `customerid` int(11) NOT NULL AUTO_INCREMENT,
-  `firstName` varchar(45) NOT NULL,
-  `lastName` varchar(45) NOT NULL,
-  `phoneNumber` varchar(45) NOT NULL,
-  `email` varchar(45) NOT NULL,
-  `houseNumber` int(11) DEFAULT NULL,
-  `street` varchar(45) DEFAULT NULL,
-  `province` varchar(2) DEFAULT NULL,
-  `postalCode` varchar(7) DEFAULT NULL,
-  PRIMARY KEY (`customerid`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `customer`
---
-
-LOCK TABLES `customer` WRITE;
-/*!40000 ALTER TABLE `customer` DISABLE KEYS */;
-/*!40000 ALTER TABLE `customer` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `employee`
---
-
-DROP TABLE IF EXISTS `employee`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `employee` (
-  `employeeid` int(11) NOT NULL AUTO_INCREMENT,
-  `username` varchar(45) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  PRIMARY KEY (`employeeid`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `employee`
---
-
-LOCK TABLES `employee` WRITE;
-/*!40000 ALTER TABLE `employee` DISABLE KEYS */;
-INSERT INTO `employee` VALUES (1,'admin','12345');
-/*!40000 ALTER TABLE `employee` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `orders`
---
-
-DROP TABLE IF EXISTS `orders`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `orders` (
-  `orderId` int(11) NOT NULL AUTO_INCREMENT,
-  `totalPrice` float NOT NULL DEFAULT '0',
-  `deliveryDateTime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `placedDateTime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `customerId` int(11) NOT NULL,
-  `orderStatus` varchar(45) NOT NULL DEFAULT 'PENDING',
-  PRIMARY KEY (`orderId`),
-  KEY `customeridFK_idx` (`customerId`),
-  CONSTRAINT `customeridFK` FOREIGN KEY (`customerId`) REFERENCES `customer` (`customerid`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `orders`
---
-
-LOCK TABLES `orders` WRITE;
-/*!40000 ALTER TABLE `orders` DISABLE KEYS */;
-/*!40000 ALTER TABLE `orders` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `pizza`
---
-
-DROP TABLE IF EXISTS `pizza`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `pizza` (
-  `pizzaId` int(11) NOT NULL AUTO_INCREMENT,
-  `sizeId` int(11) NOT NULL,
-  `isFinished` tinyint(4) NOT NULL DEFAULT '0',
-  `crustTypeId` int(11) NOT NULL,
-  `price` float NOT NULL,
-  `orderId` int(11) NOT NULL,
-  PRIMARY KEY (`pizzaId`),
-  KEY `crusttypeFK_idx` (`crustTypeId`),
-  KEY `sizeidFK_idx` (`sizeId`),
-  KEY `orderidFK_idx` (`orderId`),
-  CONSTRAINT `crusttypeFK` FOREIGN KEY (`crustTypeId`) REFERENCES `crusttypes` (`crustTypeId`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `orderidFK` FOREIGN KEY (`orderId`) REFERENCES `orders` (`orderId`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `sizeidFK` FOREIGN KEY (`sizeId`) REFERENCES `sizes` (`sizeid`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `pizza`
---
-
-LOCK TABLES `pizza` WRITE;
-/*!40000 ALTER TABLE `pizza` DISABLE KEYS */;
-/*!40000 ALTER TABLE `pizza` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `pizza_toppings_map`
---
-
-DROP TABLE IF EXISTS `pizza_toppings_map`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `pizza_toppings_map` (
-  `toppingId` int(11) NOT NULL,
-  `pizzaId` int(11) NOT NULL,
-  `pizza_toppings_id` int(11) NOT NULL AUTO_INCREMENT,
-  PRIMARY KEY (`pizza_toppings_id`),
-  KEY `pizzaidFK_idx` (`pizzaId`),
-  KEY `toppingidFK` (`toppingId`),
-  CONSTRAINT `pizzaidFK` FOREIGN KEY (`pizzaId`) REFERENCES `pizza` (`pizzaId`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `toppingidFK` FOREIGN KEY (`toppingId`) REFERENCES `toppings` (`toppingId`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `pizza_toppings_map`
---
-
-LOCK TABLES `pizza_toppings_map` WRITE;
-/*!40000 ALTER TABLE `pizza_toppings_map` DISABLE KEYS */;
-/*!40000 ALTER TABLE `pizza_toppings_map` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `sizes`
---
-
-DROP TABLE IF EXISTS `sizes`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `sizes` (
-  `sizeid` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(45) NOT NULL,
-  PRIMARY KEY (`sizeid`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `sizes`
---
-
-LOCK TABLES `sizes` WRITE;
-/*!40000 ALTER TABLE `sizes` DISABLE KEYS */;
-/*!40000 ALTER TABLE `sizes` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `toppings`
---
-
-DROP TABLE IF EXISTS `toppings`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `toppings` (
-  `toppingId` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(45) NOT NULL,
-  `price` float NOT NULL DEFAULT '0',
-  `createdate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `empAddedBy` int(11) NOT NULL,
-  PRIMARY KEY (`toppingId`),
-  KEY `employeeidFK_idx` (`empAddedBy`),
-  CONSTRAINT `employeeidFK` FOREIGN KEY (`empAddedBy`) REFERENCES `employee` (`employeeid`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `toppings`
---
-
-LOCK TABLES `toppings` WRITE;
-/*!40000 ALTER TABLE `toppings` DISABLE KEYS */;
-INSERT INTO `toppings` VALUES (5,'cheese',0,'2017-11-04 23:35:40',1),(6,'extra cheese',1.99,'2017-11-04 23:35:40',1),(7,'pepperoni',1.99,'2017-11-04 23:35:40',1),(8,'green peppers',1.99,'2017-11-04 23:35:40',1);
-/*!40000 ALTER TABLE `toppings` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Dumping events for database 'pizzadb'
---
-
---
--- Dumping routines for database 'pizzadb'
---
-
---
--- Current Database: `fa-jedpalmater`
---
-
-CREATE DATABASE /*!32312 IF NOT EXISTS*/ `fa-jedpalmater` /*!40100 DEFAULT CHARACTER SET latin1 */;
-
-USE `fa-jedpalmater`;
-
---
--- Table structure for table `comment`
---
-
-DROP TABLE IF EXISTS `comment`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `comment` (
-  `comment_id` int(11) NOT NULL AUTO_INCREMENT,
-  `comment` text NOT NULL,
-  `date_created` varchar(50) NOT NULL,
-  `member_id` varchar(30) NOT NULL,
-  PRIMARY KEY (`comment_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=178 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
 -- Dumping data for table `comment`
 --
 
 LOCK TABLES `comment` WRITE;
 /*!40000 ALTER TABLE `comment` DISABLE KEYS */;
+INSERT INTO `comment` VALUES (192,'adsfasdfweef','2017-12-03 19:11:27','108'),(181,'test','2017-12-03 18:49:21','90'),(182,'test','2017-12-03 18:49:32','90'),(183,'test','2017-12-03 18:49:40','90'),(190,'asdfasdfasd','2017-12-03 19:10:40','108'),(194,'11111111111111111111','2017-12-03 19:11:53','108'),(195,'asdfasdfasdf','2017-12-03 19:13:10','90');
 /*!40000 ALTER TABLE `comment` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Table structure for table `day`
---
-
-DROP TABLE IF EXISTS `day`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `day` (
-  `day_id` int(11) NOT NULL AUTO_INCREMENT,
-  `day` int(2) NOT NULL,
-  PRIMARY KEY (`day_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=32 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `day`
@@ -310,43 +38,14 @@ INSERT INTO `day` VALUES (1,1),(2,2),(3,3),(4,4),(5,5),(6,6),(7,7),(8,8),(9,9),(
 UNLOCK TABLES;
 
 --
--- Table structure for table `friends`
---
-
-DROP TABLE IF EXISTS `friends`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `friends` (
-  `member_id` int(11) NOT NULL,
-  `datetime` datetime NOT NULL,
-  `status` varchar(11) NOT NULL,
-  `friends_with` int(11) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
 -- Dumping data for table `friends`
 --
 
 LOCK TABLES `friends` WRITE;
 /*!40000 ALTER TABLE `friends` DISABLE KEYS */;
+INSERT INTO `friends` VALUES (90,'2017-12-03 14:34:29','conf',108),(108,'2017-12-03 14:48:09','unconf',129),(90,'2017-12-03 14:54:45','unconf',129),(108,'2017-12-03 15:14:07','conf',90);
 /*!40000 ALTER TABLE `friends` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Table structure for table `likes`
---
-
-DROP TABLE IF EXISTS `likes`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `likes` (
-  `like_id` int(11) NOT NULL AUTO_INCREMENT,
-  `remarks` text NOT NULL,
-  `remarksby` varchar(30) NOT NULL,
-  PRIMARY KEY (`like_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `likes`
@@ -358,70 +57,14 @@ LOCK TABLES `likes` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `members`
---
-
-DROP TABLE IF EXISTS `members`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `members` (
-  `member_id` int(11) NOT NULL AUTO_INCREMENT,
-  `UserName` varchar(20) NOT NULL,
-  `Password` varchar(80) NOT NULL,
-  `FirstName` varchar(30) NOT NULL,
-  `LastName` varchar(30) NOT NULL,
-  `Address` varchar(200) NOT NULL,
-  `Province` varchar(2) DEFAULT NULL,
-  `PostalCode` varchar(10) DEFAULT NULL,
-  `ContactNo` varchar(20) NOT NULL,
-  `email` varchar(100) NOT NULL,
-  `Birthdate` varchar(20) NOT NULL,
-  `Gender` varchar(20) NOT NULL,
-  `DateAdded` datetime NOT NULL,
-  `profImage` varchar(200) DEFAULT NULL,
-  `curcity` varchar(50) DEFAULT NULL,
-  `hometown` varchar(50) DEFAULT NULL,
-  `Interested` varchar(30) DEFAULT NULL,
-  `language` varchar(30) DEFAULT NULL,
-  `college` varchar(100) DEFAULT NULL,
-  `highschool` varchar(200) DEFAULT NULL,
-  `experiences` varchar(200) DEFAULT NULL,
-  `aboutme` varchar(200) DEFAULT NULL,
-  `month` varchar(20) DEFAULT NULL,
-  `day` varchar(2) DEFAULT NULL,
-  `year` varchar(4) DEFAULT NULL,
-  `Stats` varchar(30) DEFAULT NULL,
-  PRIMARY KEY (`member_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=132 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
 -- Dumping data for table `members`
 --
 
 LOCK TABLES `members` WRITE;
 /*!40000 ALTER TABLE `members` DISABLE KEYS */;
-INSERT INTO `members` VALUES (90,'jed','$2y$10$8xst7YGWM41W.QvXuvfDa.j0cwqfliUhahhfTEzMvtLzd.owtqlDe','Jed','Palmater','26 Duffie Drive Fredericton','NB','E3B 1M4','5065555555','jed@palmater.ca','06/29/1990','Male','2017-09-27 18:47:44','Upload/car_smile.jpg','Fredericton NB','Fredericton','Female','English','NBCC','FHS','TEST','AAAAAAAAAAAAAAAAA',NULL,NULL,NULL,NULL),(108,'chris','$2y$10$y04LQoIVchI83z8tnKDc9OXTUcsfZh9Ps5XsYuuurWvv06rHmfWhS','Chris','Pickard','my house',NULL,NULL,'5065554444','chris@pickard.ca','10/16/1998','Female','2017-10-16 20:34:06','Upload/Photo 2012-04-03, 3 16 23 PM.jpg','Freddy','Moms','Male','English','NUN','SUM','I did things once..........','I like pointy things!',NULL,NULL,NULL,NULL),(129,'jeddy','$2y$10$5v6OlFmcaSjOAlDqrLLRi.CowecNYIMNvRXGft3MmpKR0.QBiosQ.','jeddy','Palmater','19 Greystone Court','NB','E3B 6R5','50655544444','jed@p.ca','04/20/1988','Male','2017-11-13 15:42:41',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(124,'Voluptates','$2y$10$IzSJHBK1PhcJfTWnLSxbFu.5ZVAP010HOhMJzaAjAQ0H258wnhHyW','Haviva Cain','Stacey Jarvis','Et accusantium eaque aliquid ad quaerat laborum','SK','A2P 3N7','887-558-5433','jack@yahoo.com','11/19/1968','Male','2017-11-05 15:16:30',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(113,'megful','$2y$10$HqZ5l9nrLIHHcON3WZWnSO5aBJ/ijI3o5K0sg4co3mxWOnWsn8Pku','meg','ful','123','NB',NULL,'5062624444','me@you.ca','11/14/1967','Female','2017-11-01 17:35:47',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(128,'ChrisMeg','$2y$10$7uJ92JOSFaxV6AUimIzeS.9xWMiqxwClVogmewvChy76.KIzfcFL.','Christina','Megleana','555 Your street','AB','E3K 2k2','5554443333','chris@meg.ca','11/08/1976','Female','2017-11-12 17:17:59',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(125,'Rerum','$2y$10$Gqrl/FGYqbFXuzKfoqauxOHm1lQO38WRknLlX4RHxpon0Ydjtm8Am','Demetrius Horton','Cole Dean','Aliquip non facere corrupti voluptatem quis soluta aliquam in id quae qui','NT','S7K8C6','863-322-8907','jack@gmail.com','11/19/1970','Male','2017-11-05 15:18:34',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(118,'newTester','$2y$10$eiZv6Yks.P53mjUwCjIaZudAIKeHmMhRWlTC6f9zFN/QxYQDNagk2','tester','McTest','123 Test Dr','MB','E3B 9K2','506-262-9999','2@2','01/12/1970','Female','2017-11-01 19:29:41',NULL,'','','Male','English','','','','',NULL,NULL,NULL,NULL),(130,'jedp2','$2y$10$I7LsPsN1Sb.UMywWWUzq6eqLaiNhtPnr76s3dLvTbbUp/UX4Fv3TS','Jed','Palmater','19 Greystone Crt','AB','E3B 1S4','5062223333','jed@pal.ca','11/08/1978','Female','2017-11-14 15:53:14',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(131,'jedp22','$2y$10$CQF75gP24anRm9HwsvWe.eyq8d7I93DO7rpXVvFngUkE3SRpFDfjm','Jed','Palmater','19 Greystone Crt','NB','E3B 1S4','5062223333','jed2@pal.ca','11/08/1978','Female','2017-11-14 15:53:59',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+INSERT INTO `members` VALUES (90,'jed','$2y$10$8xst7YGWM41W.QvXuvfDa.j0cwqfliUhahhfTEzMvtLzd.owtqlDe','Jed','Palmater','26 Duffie Drive Fredericton','AB','T1A 1A1','5062628888','jed@palmater.ca','06/29/1990','Male','2017-09-27 18:47:44','Upload/car_smile.jpg','Fredericton NB','Fredericton','Female','English','NBCC','FHS','TEST','AAAAAAAAAAAAAAAAA',NULL,NULL,NULL,NULL),(108,'chris','$2y$10$y04LQoIVchI83z8tnKDc9OXTUcsfZh9Ps5XsYuuurWvv06rHmfWhS','Chris','Pickard','my house',NULL,NULL,'5065554444','chris@pickard.ca','10/16/1998','Female','2017-10-16 20:34:06','Upload/Photo 2012-04-03, 3 16 23 PM.jpg','Freddy','Moms','Male','English','NUN','SUM','I did things once..........','I like pointy things!',NULL,NULL,NULL,NULL),(129,'jeddy','$2y$10$5v6OlFmcaSjOAlDqrLLRi.CowecNYIMNvRXGft3MmpKR0.QBiosQ.','jeddy','Palmater','19 Greystone Court','NB','E3B 6R5','50655544444','jed@p.ca','04/20/1988','Male','2017-11-13 15:42:41',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(124,'Voluptates','$2y$10$IzSJHBK1PhcJfTWnLSxbFu.5ZVAP010HOhMJzaAjAQ0H258wnhHyW','Haviva Cain','Stacey Jarvis','Et accusantium eaque aliquid ad quaerat laborum','SK','A2P 3N7','887-558-5433','jack@yahoo.com','11/19/1968','Male','2017-11-05 15:16:30',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(113,'megful','$2y$10$HqZ5l9nrLIHHcON3WZWnSO5aBJ/ijI3o5K0sg4co3mxWOnWsn8Pku','meg','ful','123','NB',NULL,'5062624444','me@you.ca','11/14/1967','Female','2017-11-01 17:35:47',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(128,'ChrisMeg','$2y$10$7uJ92JOSFaxV6AUimIzeS.9xWMiqxwClVogmewvChy76.KIzfcFL.','Christina','Megleana','555 Your street','AB','E3K 2k2','5554443333','chris@meg.ca','11/08/1976','Female','2017-11-12 17:17:59',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(125,'Rerum','$2y$10$Gqrl/FGYqbFXuzKfoqauxOHm1lQO38WRknLlX4RHxpon0Ydjtm8Am','Demetrius Horton','Cole Dean','Aliquip non facere corrupti voluptatem quis soluta aliquam in id quae qui','NT','S7K8C6','863-322-8907','jack@gmail.com','11/19/1970','Male','2017-11-05 15:18:34',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(118,'newTester','$2y$10$eiZv6Yks.P53mjUwCjIaZudAIKeHmMhRWlTC6f9zFN/QxYQDNagk2','tester','McTest','123 Test Dr','MB','E3B 9K2','506-262-9999','2@2','01/12/1970','Female','2017-11-01 19:29:41',NULL,'','','Male','English','','','','',NULL,NULL,NULL,NULL),(130,'jedp2','$2y$10$I7LsPsN1Sb.UMywWWUzq6eqLaiNhtPnr76s3dLvTbbUp/UX4Fv3TS','Jed','Palmater','19 Greystone Crt','AB','E3B 1S4','5062223333','jed@pal.ca','11/08/1978','Female','2017-11-14 15:53:14',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(131,'jedp22','$2y$10$CQF75gP24anRm9HwsvWe.eyq8d7I93DO7rpXVvFngUkE3SRpFDfjm','Jed','Palmater','19 Greystone Crt','NB','E3B 1S4','5062223333','jed2@pal.ca','11/08/1978','Female','2017-11-14 15:53:59',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(132,'Abconsecteturexer','$2y$10$.Th3PSZUvmvXbjh6FKKVAeSf5mjtIw50h6FFrHf699kHlAtaUzKUy','Melanie Morrison','Fitzgerald Campos','Cupiditate qui adipisicing velit beatae ut sint unde aut quas dolor delect','AB','T1A1A1','5062223333','ropemaja@hotmail.com','11/02/1971','Female','2017-11-18 11:12:32',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(134,'Nisoi','$2y$10$jK5TXa.aHfuaZLslKmZpBOLGxngs1Jjo2egrjEcGFvg674EnNGdFS','Autumn Talley','Gage Owen','Itaque sint ut qui rerum consequat Sint velit incididunt maxime adipisic','AB','T1A1A1','9728955432','sesozabat@hotmail.com','11/09/1982','Female','2017-11-18 11:15:56',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(135,'Autasdf','$2y$10$xpfo31CUYhCHan9pTYM0N.QQ1j1WkxzAHjVkxfyQ5F93C2PPStxbu','Theodore Hall','Shea Lawrence','In sunt aut doloribus consequat Laboris amet quos eligendi quae voluptas ','PE','Obcaeca','6058554433','rybixe@hotmail.com','11/14/1972','Male','2017-11-18 11:16:25',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(136,'Doloremquibusdam','$2y$10$ic68vvgaxVnsnl/Xt0fcMOD0TFqCgFPO3cIx9mToeZdktJLbLbf2W','Melodie Navarro','Omar Griffith','Do quis duis dolor pariatur Et tempora possimus est dolore itaque consequ','AB','Suscipi','4005052436','hubyfym@yahoo.com','11/11/1987','Male','2017-11-18 11:17:31',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(137,'Voluptasteneturh','$2y$10$bJu3fBptHY.Y2bT/7bbuteHxRa/33Qj7vF4zl2YnQEMa0fK9AApx6','Emerson Holloway','Lucian Gould','Tempore voluptates inventore voluptatem Duis eveniet irure','NB','Et laud','5068995432','texaqekir@hotmail.com','11/22/1978','Female','2017-11-18 11:19:02',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(138,'Magnieligendi','$2y$10$dgWGy3C6712AdWHYqNe7U.TStgB4Qk1PZkdynx1ZUFsY4c7tal57m','Ulysses Luna','Sydney Sullivan','Quis sit incidunt sunt dolor inventore illo sit occaecat occaecat sit au','','','9715554321','syhamy@hotmail.com','11/07/1969','Male','2017-11-18 14:52:25',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(139,'Fugiatullam','$2y$10$9wl/pEibhrJXfFKWCpsyFuBgczt/x9DnlzEj/PcGLaId7bILVoAGq','Suki Vang','Alexandra Lynch','Voluptatem Sed ut vel sit occaecat ullamco dolorum','','','7435554321','cesocywam@gmail.com','11/17/1970','Male','2017-11-18 14:53:34',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(140,'Cupiditate','$2y$10$Z33KBn.neGjUJzq.AZJp3ebb1qrbMFe7Rk6EIkmBTlzqabHuVt8Zi','Ahmed Bryant','Melodie Rosales','Non sed eveniet at corporis nulla tempora dolor in ad animi voluptatum eu','','','2165554444','guqeke@hotmail.com','11/03/1982','Male','2017-11-24 21:41:39',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(141,'Veniampraes','$2y$10$zp0/EuYjnzxDbP.v/fj0P.uqnE5q3/nVfSBr7rcmzHabmGgk7J1jC','Alice Barber','Sonia Cummings','Id et inventore quisquam qui sed optio est sunt eligendi','AB','T1A 1A1','5405554321','bika@hotmail.com','05/18/1981','Female','2017-11-24 21:46:31',NULL,'','','Select','English','','','','',NULL,NULL,NULL,NULL),(142,'Cillum','$2y$10$4N2h07Dy.ae654zPnFdGTO1wamLzlwahII5z4ZBZO83NRe6TErnrS','Tamara Miranda','Lucian Sharpe','Quaerat sint esse ut architecto voluptatem Fugiat non doloremque laudanti','AB','T1A 1A1','6638544321','botyh@hotmail.com','11/10/1977','Male','2017-11-30 14:22:35',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `members` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Table structure for table `messages`
---
-
-DROP TABLE IF EXISTS `messages`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `messages` (
-  `message_id` int(11) NOT NULL AUTO_INCREMENT,
-  `receiver` varchar(40) NOT NULL,
-  `recipient` varchar(40) NOT NULL,
-  `datetime` datetime NOT NULL,
-  `content` varchar(100) NOT NULL,
-  `status` varchar(6) NOT NULL,
-  PRIMARY KEY (`message_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=41 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `messages`
@@ -431,20 +74,6 @@ LOCK TABLES `messages` WRITE;
 /*!40000 ALTER TABLE `messages` DISABLE KEYS */;
 /*!40000 ALTER TABLE `messages` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Table structure for table `month`
---
-
-DROP TABLE IF EXISTS `month`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `month` (
-  `month_id` int(11) NOT NULL AUTO_INCREMENT,
-  `month` varchar(15) NOT NULL,
-  PRIMARY KEY (`month_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `month`
@@ -457,47 +86,14 @@ INSERT INTO `month` VALUES (1,'January'),(2,'February'),(3,'March'),(4,'April'),
 UNLOCK TABLES;
 
 --
--- Table structure for table `photos`
---
-
-DROP TABLE IF EXISTS `photos`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `photos` (
-  `photo_id` int(11) NOT NULL AUTO_INCREMENT,
-  `location` varchar(200) NOT NULL,
-  `member_id` int(11) NOT NULL,
-  PRIMARY KEY (`photo_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=95 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
 -- Dumping data for table `photos`
 --
 
 LOCK TABLES `photos` WRITE;
 /*!40000 ALTER TABLE `photos` DISABLE KEYS */;
-INSERT INTO `photos` VALUES (93,'Upload/ca95443591fc264303a3cf79915216c8.jpg',90),(70,'Upload/Photo 2015-04-27, 3 35 24 PM.jpg',108),(71,'Upload/eagle.png',112),(72,'Upload/meg_seddy.jpg',112),(73,'Upload/neph_puppy.jpg',112),(94,'Upload/2013-08-06 20.46.45.jpg',90);
+INSERT INTO `photos` VALUES (93,'Upload/ca95443591fc264303a3cf79915216c8.jpg',90),(70,'Upload/Photo 2015-04-27, 3 35 24 PM.jpg',108),(71,'Upload/eagle.png',112),(72,'Upload/meg_seddy.jpg',112),(73,'Upload/neph_puppy.jpg',112),(94,'Upload/2013-08-06 20.46.45.jpg',90),(95,'Upload/laceplaidandtattoos-648435.jpeg',108);
 /*!40000 ALTER TABLE `photos` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Table structure for table `postcomment`
---
-
-DROP TABLE IF EXISTS `postcomment`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `postcomment` (
-  `comment_id` int(11) NOT NULL AUTO_INCREMENT,
-  `content` text NOT NULL,
-  `commentedby` varchar(30) NOT NULL,
-  `pic` varchar(100) NOT NULL,
-  `id` int(40) NOT NULL,
-  `date_created` varchar(50) NOT NULL,
-  PRIMARY KEY (`comment_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=32 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `postcomment`
@@ -505,22 +101,9 @@ CREATE TABLE `postcomment` (
 
 LOCK TABLES `postcomment` WRITE;
 /*!40000 ALTER TABLE `postcomment` DISABLE KEYS */;
+INSERT INTO `postcomment` VALUES (32,'sdfasdf','Jed Palmater','Upload/car_smile.jpg',90,'2017-12-03 16:04:59'),(33,'asdfasdf','Chris ','',108,'2017-12-03 16:06:10');
 /*!40000 ALTER TABLE `postcomment` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Table structure for table `year`
---
-
-DROP TABLE IF EXISTS `year`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `year` (
-  `year_id` int(11) NOT NULL AUTO_INCREMENT,
-  `year` int(4) NOT NULL,
-  PRIMARY KEY (`year_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=44 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `year`
@@ -549,4 +132,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-11-14 16:56:15
+-- Dump completed on 2017-12-03 19:25:45

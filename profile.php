@@ -1,5 +1,10 @@
 <?php
 	require('session.php');
+	if (isset($_SESSION['requestmessage'])) {
+		$message = $_SESSION['requestmessage'];
+		echo "<script> alert('$message') </script>";
+		unset($_SESSION['requestmessage']);
+	}
 ?>
 <html>
 <script type="text/javascript">
@@ -262,7 +267,7 @@ echo"  ";
 					<font color="#1d3162">'.$row['FirstName']." ".$row['LastName'].'</font>
 					</br>
 
-					<a href="addfriend.php?id='.$row['member_id'].'" rel="facebox"style="text-decoration:none;"  >Add as Friend</a></p>
+					<a href="addfriend.php?id='.$row['member_id'].'"  >Add as Friend</a></p>
 					<hr width=200>
 					</ul>
 				</li>';
@@ -356,7 +361,7 @@ while($row1 = mysqli_fetch_array($result1))
 	echo'<hr width="390">';
 	echo '<div class="kkk">';
 
-	echo'<a class="style" href="deletepost1.php?id=' . $row["comment_id"] . '">delete</a>&nbsp;&nbsp;<a class="style" href=""><img width=20 height=20  src=img/like.png>Like</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+	echo'<a class="style" href="deletepost.php?id=' . $row["comment_id"] . '">delete</a>&nbsp;&nbsp;<a class="style" href=""><img width=20 height=20  src=img/like.png>Like</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
 
 	$days = floor($row['TimeSpent'] / (60 * 60 * 24));
 			$remainder = $row['TimeSpent'] % (60 * 60 * 24);

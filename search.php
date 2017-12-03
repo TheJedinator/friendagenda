@@ -183,9 +183,9 @@ function search($con, $criteria){
         "<a href=\"addFriend.php\"><img src=\"img/friends.png\" width=\"16\" height=\"12\" border=\"0\" /> &nbsp;Send Friend Request"
          ."<BR><BR>";
         }//end while loop
-        if ($array[0] == ""){
-          $myString .="No results found";
-        }
+        // if ($array[0] == ""){
+        //   $myString .="No results found";
+        // }
         return $myString;
       }
 ?>
