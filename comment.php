@@ -1,31 +1,35 @@
 <?php
 	require_once('session.php');
 include('connect.php');
-$member_id = $_POST['poster'];
-//$name = $_POST['name'];
-//$lastname = $_POST['lastname'];
+$posterID = $_POST['poster'];
+if (isset($_POST['memberid']) && $_POST['memberid'] != "") {
+	$member_id = $_POST['memberid'];
+}
+else {
+	$member_id = $posterID;
+}
 $message = $_POST['message'];
-//$fullname = $name . " " . $lastname;
-$image = $_SESSION['profileimage'];
+//$image = $_SESSION['image'];
 
-
-//$sql = "INSERT INTO `postcomment`(`content`, `commentedby`, `pic`, `id`) VALUES ('$message', '$fullname', '$image', $member_id)";
-//$SQL = "INSERT into postcomment SET(content, commentedby, pic, id) VALUES('$message', '$fullname', '$image', $member_id)";
-$sql = "INSERT INTO comment (comment, member_id) VALUES ('$message', '$member_id')";
+$sql = "INSERT INTO comment (comment, member_id, poster_id) VALUES ('$message', '$member_id', '$posterID')";
 $result = mysqli_query($con, $sql);
-header("Location: profile.php");
-echo '<pre>';
-print_r(mysqli_error($con));
-echo '</pre>';
-exit;
+if ($posterID == $member_id){
+	header("Location: profile.php");
+}
+else {
+	header("Location: friendprofile.php?id=".$member_id);
+}
+// echo '<pre>';
+// print_r($member_id);
+// print_r($posterID);
+// print_r(mysqli_error($con));
+// echo '</pre>';
+// exit;
 
 
 ?>
 <html>
 <body>
-<?php
-	
-?>
 </div>
 </body>
 </html>

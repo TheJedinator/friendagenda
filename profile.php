@@ -325,6 +325,7 @@ while($row = mysqli_fetch_array($result))
           <div class="comment">
             <textarea name="message" cols="45" rows="5" id="message" onclick="this.value='';"></textarea>
           </div>
+          <input name="memberid" type="hidden" id="memberid" value="<?php if (isset($_GET['id'])){ echo $_GET['id']; }else { echo "";}  ?>"/>
           <input name="name" type="hidden" id="name" value="<?php echo $_SESSION['SESS_FIRST_NAME'];?>"/>
 		  <input name="poster" type="hidden" id="name" value="<?php echo $_SESSION['SESS_MEMBER_ID'];?>"/>
           <input name="name1" type="hidden" id="name" value="<?php echo $_SESSION['SESS_LAST_NAME'];?>"/>
@@ -338,16 +339,17 @@ $result = mysqli_query($con, $query);
 
 while($row = mysqli_fetch_assoc($result))
 {
+	$posterID = $row["poster_id"];
    echo '<div class="information">';
 	echo '<div class="pic1">';
-			$result1 = mysqli_query($con, "SELECT * FROM members WHERE member_id='".$_SESSION['SESS_MEMBER_ID'] ."'");
+			$result1 = mysqli_query($con, "SELECT * FROM members WHERE member_id='".$posterID ."'");
 while($row1 = mysqli_fetch_array($result1))
   {
 	echo "<img width=40 height=40 alt='Unable to View' src='" . $row1["profImage"] . "'>";
 	}
 	echo '<div class="message">';
 
-		$result1 = mysqli_query($con, "SELECT * FROM members WHERE member_id='".$_SESSION['SESS_MEMBER_ID'] ."'");
+		$result1 = mysqli_query($con, "SELECT * FROM members WHERE member_id='".$posterID."'");
 while($row1 = mysqli_fetch_array($result1))
 {
 	echo " Posted by:<font color=#1d3162> {$row1['FirstName']}"."&nbsp;{$row1["LastName"]}</font>";
